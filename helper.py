@@ -52,16 +52,36 @@ def create_wordcloud(selected_user, df):
 
 
 def most_common_words(selected_user, df):
-    if selected_user != 'All Users':
-        df = df[df['user'] == selected_user]
-    df = df[df['user'] != 'group_notification']
-    df = df[df['message'] != '<Media omitted>\n']
-    df = df[df['message'] != 'null\n']
-    words = []
-    for message in df['message']:
-        words.extend(message.lower().split())
-    most_common_df = pd.DataFrame(Counter(words).most_common(20), columns=["Word", "Frequency"])
+    # if selected_user != 'All Users':
+    #     df = df[df['user'] == selected_user]
+    # df = df[df['user'] != 'group_notification']
+    # df = df[df['message'] != '<Media omitted>\n']
+    # df = df[df['message'] != 'null\n']
+    # words = []
+    # for message in df['message']:
+    #     words.extend(message.lower().split())
+    # most_common_df = pd.DataFrame(Counter(words).most_common(20), columns=["Word", "Frequency"])
 
+    # return most_common_df
+
+    f = open('stop_words.txt','r')
+    stop_words = f.read()
+
+    if selected_user != 'Overall':
+        df = df[df['user'] == selected_user]
+
+    temp = df[df['user'] != 'group_notification']
+    temp = temp[temp['message'] != '<Media omitted>\n']
+    temp = temp[temp['message'] != 'null\n']
+
+    words = []
+
+    for message in temp['message']:
+        for word in message.lower().split():
+            if word not in stop_words:
+                words.extend(word)
+
+    most_common_df = pd.DataFrame(Counter(words).most_common(20), columns=["Word", "Frequency"])
     return most_common_df
 
 
