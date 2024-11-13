@@ -17,7 +17,7 @@ if uploaded_file is not None:
     with zipfile.ZipFile(uploaded_file, 'r') as zip_ref:
         # Get the list of files in the ZIP
         file_list = zip_ref.namelist()
-
+        
         # Filter for .txt files (assuming there's only one .txt file)
         txt_files = [file for file in file_list if file.endswith('.txt')]
         txt_file_name = txt_files[0]  # Get the first .txt file in the list
@@ -27,7 +27,7 @@ if uploaded_file is not None:
             data = file.read().decode('utf-8')
         # Display the content of the file (or perform further operations)
         df = preprocessor.preprocess(data)
-
+        st.dataframe(df)
         # fetch  unique users
         user_list = df['user'].unique().tolist()
         user_list.remove('group_notification')
